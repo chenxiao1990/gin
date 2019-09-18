@@ -7,7 +7,7 @@
 package json
 
 import (
-	json "github.com/chenxiao1990/gin/internal/json/myjson"
+	"github.com/chenxiao1990/gin/internal/json/json"
 )
 
 var (
