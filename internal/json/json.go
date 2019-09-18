@@ -6,7 +6,9 @@
 
 package json
 
-import "encoding/json"
+import (
+	json "github.com/chenxiao1990/gin/internal/json/myjson"
+)
 
 var (
 	// Marshal is exported by gin/json package.
