@@ -13,7 +13,7 @@ import (
 	"path"
 	"sync"
 
-	"github.com/gin-gonic/gin/render"
+	"github.com/chenxiao1990/gin/render"
 )
 
 const defaultMultipartMemory = 32 << 20 // 32 MB
