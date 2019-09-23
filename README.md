@@ -47,13 +47,16 @@ import "github.com/chenxiao1990/gin/internal/json/json"
 ```
 gin/internal/json/json/decode.go  946行增加
 
-case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+if len(s) == 0 {
+	v.SetInt(0)
+} else {
 	n, err := strconv.ParseInt(string(s), 10, 64)
 	if err != nil || v.OverflowInt(n) {
 		d.saveError(&UnmarshalTypeError{Value: "string " + string(s), Type: v.Type(), Offset: int64(d.readIndex())})
 		break
 	}
 	v.SetInt(n)
+}
 ```
 
 ## 后续使用可能会遇到的问题
