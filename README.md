@@ -18,11 +18,16 @@ err := c.ShouldBind(&a)
 ```
 
 ## 为什么要改
+
+### 1. string to int
 因为老项目中使用的动态语言php，好多uid的类型是 123 也是"123" 
 
 gin解析到struct有问题，因为不能更改所有老项目代码，所以只能改gin
 
 找到gin的json decoder 设置在 gin/internal/json 这个“内部包”中，无法修改，只能fork了
+
+### 2. time.Time format
+time.Time 格式化成 "2006-01-02 15:03:04"
 
 ## 修改内容
 
@@ -56,6 +61,23 @@ if len(s) == 0 {
 		break
 	}
 	v.SetInt(n)
+}
+```
+
+```
+为了gin输出 time.Time的格式为 "2006-01-02 15:04:05"
+
+gin/internal/json/json/encode.go  456行增加
+
+t := reflect.TypeOf(m)
+s := t.Name()
+s2 := t.PkgPath()
+if s2+"."+s == "time.Time" {
+	timeFormart := "2006-01-02 15:04:05"
+	b = make([]byte, 0, len(timeFormart)+2)
+	b = append(b, '"')
+	b = m.(time.Time).AppendFormat(b, timeFormart)
+	b = append(b, '"')
 }
 ```
 

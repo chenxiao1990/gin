@@ -21,6 +21,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 	"unicode"
 	"unicode/utf8"
 )
@@ -452,6 +453,18 @@ func marshalerEncoder(e *encodeState, v reflect.Value, opts encOpts) {
 		return
 	}
 	b, err := m.MarshalJSON()
+	// begin 陈晓添加
+	t := reflect.TypeOf(m)
+	s := t.Name()
+	s2 := t.PkgPath()
+	if s2+"."+s == "time.Time" {
+		timeFormart := "2006-01-02 15:04:05"
+		b = make([]byte, 0, len(timeFormart)+2)
+		b = append(b, '"')
+		b = m.(time.Time).AppendFormat(b, timeFormart)
+		b = append(b, '"')
+	}
+	// end 陈晓添加
 	if err == nil {
 		// copy JSON into buffer, checking validity.
 		err = compact(&e.Buffer, b, opts.escapeHTML)
